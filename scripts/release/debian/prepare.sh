@@ -104,7 +104,7 @@ ${TAB}dh \$@ --sourcedirectory $source_dir
 
 override_dh_install:
 ${TAB}mkdir -p debian/azure-cli/opt/az
-${TAB}find python_env/ -name ".py" -delete
+# ${TAB}find python_env/ -name "*.py" -delete
 ${TAB}cp -a python_env/* debian/azure-cli/opt/az
 ${TAB}mkdir -p debian/azure-cli/usr/bin/
 ${TAB}echo "\043!/usr/bin/env bash\nAZ_INSTALLER=DEB /opt/az/bin/python3 -Im azure.cli \"\044\100\"" > debian/azure-cli/usr/bin/az
