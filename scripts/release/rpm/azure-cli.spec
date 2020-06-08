@@ -1,6 +1,8 @@
 # RPM spec file for Azure CLI
 # Definition of macros used - https://fedoraproject.org/wiki/Packaging:RPMMacros?rd=Packaging/RPMMacros
 
+%global __python %{__python3}
+
 # .el7.centos -> .el7
 %if 0%{?rhel}
   %define dist .el%{?rhel}
@@ -13,6 +15,7 @@
 %define version        %{getenv:CLI_VERSION}
 %define repo_path      %{getenv:REPO_PATH}
 %define cli_lib_dir    %{_libdir}/az
+%define _python_bytecompile_errors_terminate_build 0
 
 Summary:        Azure CLI
 License:        MIT
@@ -50,7 +53,6 @@ mkdir -p %{buildroot}%{_bindir}
 python_version=$(ls %{buildroot}%{cli_lib_dir}/lib/ | head -n 1)
 printf "#!/usr/bin/env bash\nAZ_INSTALLER=RPM PYTHONPATH=%{cli_lib_dir}/lib/${python_version}/site-packages /usr/bin/%{python_cmd} -sm azure.cli \"\$@\"" > %{buildroot}%{_bindir}/az
 rm %{buildroot}%{cli_lib_dir}/bin/python* %{buildroot}%{cli_lib_dir}/bin/pip*
-find %{buildroot}%{cli_lib_dir}/lib/${python_version}/site-packages/ -name "*.py" -delete
 
 # Set up tab completion
 mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/
